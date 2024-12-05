@@ -32,4 +32,17 @@ The following steps had been taken to complete this milestone successfully :
     * npm init
     * npm i expess cors nodemon mongoose
 
+## Milestone 3 - Server Setup & Error Handling
+Tasks :
+* Setting up the Backend folder in a structured manner.
+* Creating a database in MongoDB and connecting it to the server.
+* Writing error handling code.
+
+Steps taken to accomplish these tasks :
+1. Inside src, create the 'config' directory. Add a file named '.env' inside it. This file should contain the MongoDB database url and PORT details.
+2. Initialize the express application in the 'app.js; file.
+3. Create another directory inside src named 'DB' and intialise a file 'Database.js' inside it. This would help us connect to ouor database using mongoose.
+4.  Connect the databse to the server in the 'index.js' file.
+5. Create a 'util' directory with the file named 'ErrorHandler.js'. This file would have the codes for handling all the errors.
+
 
