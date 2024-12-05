@@ -44,5 +44,11 @@ Steps taken to accomplish these tasks :
 3. Create another directory inside src named 'DB' and intialise a file 'Database.js' inside it. This would help us connect to ouor database using mongoose.
 4.  Connect the databse to the server in the 'index.js' file.
 5. Create a 'util' directory with the file named 'ErrorHandler.js'. This file would have the codes for handling all the errors.
+   
+## Milestone 4 - Creating User Controller & Setting up Multer
+1. Created user.route file inside the routes directory for handling the routes.
+2. Created user.controller inside controllers to check for existing users and creation of new ones.
+3. Created multer file inside to help users upload files of different file types.
+4. Export all the necessary files from each files and add the correct path wherever required.
 
 
