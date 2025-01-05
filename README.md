@@ -51,4 +51,8 @@ Steps taken to accomplish these tasks :
 3. Created multer file inside to help users upload files of different file types.
 4. Export all the necessary files from each files and add the correct path wherever required.
 
-
+## Milestone 5 - Building Sign up page and adding Form Validtaion
+1. Created a signup page as part of the UI which helps create an account by taking in user details and a unique email.
+2. The signup page and the login page in the 'components/authorization/' folder were updated with the required codes.
+3. Added from validation to the sign up page to ensure the details entered are as per the requirements and the backend stores correct and clean data.
+4. This was done by creating a new file named 'validation.js' which includes the code for the same.
