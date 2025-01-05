@@ -68,3 +68,8 @@ Steps taken to accomplish these tasks :
 ## Milestone 8 - Creating Card Component and Designing Homepage Layout
 1. Developed a reusable card component to display product details such as name, image, and price. 
 2. Designed a home page with flexbox or grid layout, promising a neat and structured display of the product cards.
+
+## Milestone 9 - Created a Product Input Form
+1. Allows users to add information about the products which can be dislayed along with the product in the products' homepage.
+2. This was done by creating a new page called 'ProductEntryPage'and necessary code was written for the same.
+2. Takes in both descryptive details as well as images of the products.
