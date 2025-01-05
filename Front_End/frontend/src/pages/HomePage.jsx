@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import Card from '../component/ProductCard/Card';
 
@@ -10,19 +9,17 @@ function HomePage() {
   console.log(data);
 
   return (
-    <>
+    <div>
       <h1 className="text-center">Home Page for Follow Along</h1>
 
       <div className="grid grid-cols-3">
-        {data.map((ele, index) => {
-          return (
-            <div key={index} style={{ margin: 'auto' }}>
-              <Card title={ele.title} Index={index} />
-            </div>
-          );
-        })}
+        {data.map((ele, index) => (
+          <div key={index} style={{ margin: 'auto' }} className="border border-white">
+            <Card title={ele.title} Index={index} />
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 }
 
