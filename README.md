@@ -64,3 +64,7 @@ Steps taken to accomplish these tasks :
 4. The password, before getting stored in the database, gets hashed with the help of libraries such as 'bcrypt.js'.
 5. While logging in, crosschecks the unique email id in the database and also verifies if the passwords are similar.
 6. If yes, then the authentication is done successfully otherwise throws an error and asks to signup first.
+
+## Milestone 8 - Creating Card Component and Designing Homepage Layout
+1. Developed a reusable card component to display product details such as name, image, and price. 
+2. Designed a home page with flexbox or grid layout, promising a neat and structured display of the product cards.
