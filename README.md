@@ -56,3 +56,11 @@ Steps taken to accomplish these tasks :
 2. The signup page and the login page in the 'components/authorization/' folder were updated with the required codes.
 3. Added from validation to the sign up page to ensure the details entered are as per the requirements and the backend stores correct and clean data.
 4. This was done by creating a new file named 'validation.js' which includes the code for the same.
+
+## Milestone 7 - Adding email verfication and Password Hashing
+1. Created two routes - one for signup and one for login.
+2. Takes in user details identified mainly by their unique email and checks if the email exists in the database. If present, logs in directly.
+3. If new user, stores the user details/credentials by creating a new user in the database and assigns a unique user_id for the same.
+4. The password, before getting stored in the database, gets hashed with the help of libraries such as 'bcrypt.js'.
+5. While logging in, crosschecks the unique email id in the database and also verifies if the passwords are similar.
+6. If yes, then the authentication is done successfully otherwise throws an error and asks to signup first.
