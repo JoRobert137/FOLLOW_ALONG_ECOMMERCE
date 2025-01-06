@@ -73,3 +73,12 @@ Steps taken to accomplish these tasks :
 1. Allows users to add information about the products which can be dislayed along with the product in the products' homepage.
 2. This was done by creating a new page called 'ProductEntryPage'and necessary code was written for the same.
 2. Takes in both descryptive details as well as images of the products.
+
+## Milesttone 10 - Created Endpoint for Updating DB
+1. Created a product schema to get details of the product.
+2. Using this schema, the product details are stored in the DB.
+3. Also used cloudinary for initiating multer and store uploaded files in the 'temp-uploads' folder.
+
+## Milestone 11 - Created Endpoint to fetch data from DB
+1. The data which had been created earlier, are fetched from the database using get request.
+2. After fetching this data, it is sent to the client-side.
