@@ -73,3 +73,5 @@ Steps taken to accomplish these tasks :
 1. Allows users to add information about the products which can be dislayed along with the product in the products' homepage.
 2. This was done by creating a new page called 'ProductEntryPage'and necessary code was written for the same.
 2. Takes in both descryptive details as well as images of the products.
+
+## Milesttone 10 - 
