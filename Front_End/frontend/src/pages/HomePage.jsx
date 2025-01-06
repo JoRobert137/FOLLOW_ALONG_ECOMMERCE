@@ -1,25 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '../components/authorization/ProductCard/Card';
+import axios from 'axios';
 
 function HomePage() {
-  const [data, setData] = useState(
-    new Array(20).fill({ title: 'Product Title' })
-  );
+  const [product, setProduct] = useState([]);
+  const [error, setError] = useState(null);
 
-  console.log(data);
+  const getProducts = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/product/get-products');
+      setProduct(response.data.data);
+      console.log(response)
+    } catch (err) {
+      console.error('Error fetching products:', err);
+      setError('Failed to fetch products. Please try again later.');
+    }
+  };
+
+  useEffect(() => {
+    
+    getProducts();
+  }, []);
 
   return (
-    <div>
+    <>
       <h1 className="text-center">Home Page for Follow Along</h1>
 
-      <div className="grid grid-cols-3">
-        {data.map((ele, index) => (
-          <div key={index} style={{ margin: 'auto' }} className="border border-white">
-            <Card title={ele.title} Index={index} />
-          </div>
-        ))}
+      {error && <p className="text-center text-red-500">{error}</p>}
+
+      <div className="grid grid-cols-3 gap-4 p-4">
+        {product.length > 0 ? (
+          product.map((ele, index) => (
+            <div style={{ margin: 'auto' }} key={index}>
+              <Card product={ele} />
+            </div>
+          ))
+        ) : (
+          <p className="text-center">No products available.</p>
+        )}
       </div>
-    </div>
+    </>
   );
 }
 
