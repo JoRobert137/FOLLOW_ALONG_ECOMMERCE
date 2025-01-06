@@ -55,16 +55,17 @@ const createProductController = async (req, res) => {
   }
 };
 
-const getProductDataController = async(res, req) => {
+const getProductDataController = async (req, res) => {
   try {
-    const data = await ProductModel.find();
+    const data = await ProductModel.find(); 
     return res
-      .status(200)
-      .send({data, message: "Data Fetched Successfully"});
-  } catch (err){
-
-    return res.status(500).send({message: err.message, success: false});
+    .status(200)
+    .send({data,message: 'Data Fetched Successfully', });
+  } catch (error) {
+    return res
+    .status(500)
+    .send({message: error.message,success: false,});
   }
 };
 
-module.exports = { createProductController, getProductDataController };
+module.exports = { getProductDataController, createProductController };
