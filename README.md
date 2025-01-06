@@ -82,3 +82,7 @@ Steps taken to accomplish these tasks :
 ## Milestone 11 - Created Endpoint to fetch data from DB
 1. The data which had been created earlier, are fetched from the database using get request.
 2. After fetching this data, it is sent to the client-side.
+
+## Milestone 12 - Fetched the data fromthe Database
+1. Fetched the data which was posted in the database in the last milestone via an API call.
+2. Passed on this fetched data to Product Card to display it in the frontend.
