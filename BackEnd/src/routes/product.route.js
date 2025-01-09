@@ -21,4 +21,6 @@ router.put('/update-products/:id', upload.array('files', 5), updateProductContro
 
 router.get('/get-single/:id', getSingleProductDocumentController);
 
+router.delete('/:id', deleteSingleProduct);
+
 module.exports = router;
