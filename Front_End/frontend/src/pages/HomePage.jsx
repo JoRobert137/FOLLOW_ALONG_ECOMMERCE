@@ -1,45 +1,51 @@
 import { useEffect, useState } from 'react';
-import Card from '../components/authorization/ProductCard/Card';
+import Card from '../components/ProductCard/Card';
 import axios from 'axios';
 
 function HomePage() {
-  const [product, setProduct] = useState([]);
-  const [error, setError] = useState(null);
-
-  const getProducts = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/product/get-products');
-      setProduct(response.data.data);
-      console.log(response)
-    } catch (err) {
-      console.error('Error fetching products:', err);
-      setError('Failed to fetch products. Please try again later.');
-    }
+  const [data, setdata] = useState();
+  const fetchProduct = async () => {
+    const response = await axios.get(
+      'http://localhost:8080/product/get-products'
+    );
+    setdata(response.data.data);
+    // console.log(response);
   };
 
   useEffect(() => {
-    
-    getProducts();
+    console.log('clicked');
+
+    const callhandle = async () => {
+      await fetchProduct();
+    };
+    callhandle();
   }, []);
+  console.log(data);
 
   return (
-    <>
-      <h1 className="text-center">Home Page for Follow Along</h1>
+    <div>
+      <h1 className="text-center">Home Page for Follow along</h1>
 
-      {error && <p className="text-center text-red-500">{error}</p>}
-
-      <div className="grid grid-cols-3 gap-4 p-4">
-        {product.length > 0 ? (
-          product.map((ele, index) => (
-            <div style={{ margin: 'auto' }} key={index}>
-              <Card product={ele} />
+      <div className="grid grid-cols-3">
+        {data?.map((ele, index) => {
+          return (
+            // eslint-disable-next-line react/jsx-key
+            <div style={{ margin: 'auto' }} className="border border-white">
+              <Card
+                title={ele.title}
+                image={ele.images[0] ? ele.images[0] : 'Product Image missing'}
+                Index={index}
+                description={ele.description}
+                originalPrice={ele.originalPrice}
+                discountedPrice={ele.discountedPrice}
+                rating={ele.rating}
+                id={ele._id}
+              />
             </div>
-          ))
-        ) : (
-          <p className="text-center">No products available.</p>
-        )}
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 }
 
