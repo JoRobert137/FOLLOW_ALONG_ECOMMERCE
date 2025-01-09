@@ -9,6 +9,7 @@ function Card({
   originalPrice,
   rating,
   id,
+  handleDelete,
 }) {
     return (
       <div className="w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
@@ -59,6 +60,12 @@ function Card({
             </button>
           </Link>
           </div>
+          <button
+          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors duration-200"
+          onClick={() => handleDelete(id)}
+        >
+          🗑️
+        </button>
         </div>
       </div>
     );
