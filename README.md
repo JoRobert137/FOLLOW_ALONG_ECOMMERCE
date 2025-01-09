@@ -92,3 +92,7 @@ Steps taken to accomplish these tasks :
 2. Added a button to each product card in the UI with a functionality of opening a form which takes in the new data.
 3. The new data gets updated in the database to that particular product data.
 4. The product card now displays the new data.
+
+## Milestone 14 - Added Delete Button
+1. Added a delete route handler in the Backend.
+2. Coded for a delete button in the frontend and connected the delete route to it.
