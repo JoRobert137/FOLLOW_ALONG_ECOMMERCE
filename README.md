@@ -86,3 +86,9 @@ Steps taken to accomplish these tasks :
 ## Milestone 12 - Fetched the data fromthe Database
 1. Fetched the data which was posted in the database in the last milestone via an API call.
 2. Passed on this fetched data to Product Card to display it in the frontend.
+
+## Milestone 13 - Added Update Form
+1. Added PUT route to update existing data.
+2. Added a button to each product card in the UI with a functionality of opening a form which takes in the new data.
+3. The new data gets updated in the database to that particular product data.
+4. The product card now displays the new data.
