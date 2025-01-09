@@ -85,16 +85,18 @@ const updateProductController = async (req, res) => {
       return res.status(404).send({message: "Product not forund", success : false})
     }
 
-    const arrayImage = req.files.map(async (singleFile, index) => {
-      return cloudinary.uploader
-        .upload(singleFile.path, {
-          folder: 'uploads',
-        })
-        .then((result) => {
-          fs.unlinkSync(singleFile.path);
-          return result.url;
-        });
-    });
+    const arrayImage =
+      req.files &&
+      req.files.map(async (singleFile, index) => {
+        return cloudinary.uploader
+          .upload(singleFile.path, {
+            folder: 'uploads',
+          })
+          .then((result) => {
+            fs.unlinkSync(singleFile.path);
+            return result.url;
+          });
+      });
     
     const ImageData = await Promise.all(arrayImage);
     const findAndUpdate = await ProductModel.findByIdAndUpdate({_id:id},
