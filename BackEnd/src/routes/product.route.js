@@ -6,6 +6,7 @@ const {
   getProductDataController,
   updateProductController,
   getSingleProductDocumentController,
+  deleteSingleProduct,
 } = require('../controllers/product.controller.js');
 const router = express.Router();
 
