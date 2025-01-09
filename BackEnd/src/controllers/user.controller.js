@@ -1,8 +1,8 @@
 const UserModel = require('../models/user.model.js');
 const ErrorHandler = require('../utils/ErrorHandler.js');
 const transporter = require('../utils/sendmail.js');
-const jwt = require('jsonwebtoken'); //tokenisation of user data (every communication that happend between server(beknd) and client(ft))
-const bcrypt = require('bcrypt'); //hashes the password only
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 require('dotenv').config({
   path: '../config/.env',
@@ -37,9 +37,9 @@ async function CreateUSer(req, res) {
   };
   const token = generateToken(data);
   await transporter.sendMail({
-    to: 'mkarandeep.1208@gmail.com',
-    from: 'mkarandeep.1208@gmail.com',
-    subject: 'verification email from follow along project',
+    to: 'kodagian1137@gmail.com',
+    from: 'kodagian1137@gmail.com',
+    subject: 'Verification email from Follow-Along project',
     text: 'Text',
     html: `<h1>Hello world   http://localhost:5173/activation/${token} </h1>`,
   });
