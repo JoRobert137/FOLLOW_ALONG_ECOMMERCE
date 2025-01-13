@@ -96,3 +96,7 @@ Steps taken to accomplish these tasks :
 ## Milestone 14 - Added Delete Button
 1. Added a delete route handler in the Backend.
 2. Coded for a delete button in the frontend and connected the delete route to it.
+
+## Milestone 15 - Added Navbar
+1. Created a navbar as part of the UI to contain various pages and functionalities for different purposes.
+2. Also added the diiferent route links used to the Navbar along with it.
