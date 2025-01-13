@@ -64,7 +64,7 @@ function ProductEntryPage() {
     formDataBody.append('rating', rating);
 
     Images.map((ele) => {
-      formDataBody.append('filepath', ele);
+      formDataBody.append('files', ele);
     });
 
     console.log(formDataBody);
