@@ -100,3 +100,9 @@ Steps taken to accomplish these tasks :
 ## Milestone 15 - Added Navbar
 1. Created a navbar as part of the UI to contain various pages and functionalities for different purposes.
 2. Also added the diiferent route links used to the Navbar along with it.
+
+## MIlestone 16 - Created Product Info Page
+1. Created a separate file named SingleProductPage in the FrontEnd to show the details of a single product when clicked upon that product card.
+2. On clicking, Fetches the data and shows in the single product page in a manner which it is written.
+3. Multiple images can be seen by using the leftArrow and rightArrow functions.
+4. The images also have the Modal feature where the background goes dark while viewing the image.
