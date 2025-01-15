@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
-import ProductEntryPage from './Pages/ProductEntryPage';
+import ProductEntryPage from './pages/ProductEntryPage';
 import UpdateForm from './Pages/UpdateForm';
 import Navbar from './components/Navbar/Navbar';
 import SinglePageProduct from './pages/SingleProductPage';
