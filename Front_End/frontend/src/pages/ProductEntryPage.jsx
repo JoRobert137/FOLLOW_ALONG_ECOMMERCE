@@ -62,6 +62,7 @@ function ProductEntryPage() {
     formDataBody.append('originalPrice', originalPrice);
     formDataBody.append('quantity', quantity);
     formDataBody.append('rating', rating);
+    formDataBody.append('token', localStorage.getItem('token'));
 
     Images.map((ele) => {
       formDataBody.append('files', ele);

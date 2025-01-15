@@ -1,8 +1,9 @@
-/* eslint-disable no-unused-vars */
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import ValidationFormObject from '../../validation.js';
-import { Link } from 'react-router-dom';
-function SignupForm() {
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+function SignUpPage() {
   const [data, setData] = useState({
     name: '',
     email: '',
@@ -10,20 +11,30 @@ function SignupForm() {
     file: '',
   });
   const [error, setError] = useState('');
-
+  
+  const navigateUser = useNavigate();
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData({
-      ...data,
-      [name]: value,
-    });
+    const { name, value, files } = e.target;
+    if (name == 'file') {
+      setData({
+        ...data,
+        [name]: files[0],
+      });
+    } else {
+      setData({
+        ...data,
+        [name]: value,
+      });
+    }
+
     // console.log(data);
   };
 
-  const handleSubmit = () => {
-    const NameV = ValidationFormObject.validteName(data.name);
-    const EmailV = ValidationFormObject.validteEmail(data.email);
-    const PassV = ValidationFormObject.validtePass(data.password);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const NameV = ValidationFormObject.validateName(data.name);
+    const EmailV = ValidationFormObject.validateEmail(data.email);
+    const PassV = ValidationFormObject.validatePass(data.password);
 
     if (typeof NameV == 'string' && NameV.length > 1) {
       return setError(NameV);
@@ -34,7 +45,24 @@ function SignupForm() {
     if (typeof PassV == 'string' && PassV.length > 2) {
       return setError(PassV);
     }
+    setError('');
     // axios request
+    const formDataBody = new FormData();
+    formDataBody.append('email', data.email);
+    formDataBody.append('password', data.password);
+    formDataBody.append('name', data.name);
+    formDataBody.append('file', data.file);
+    try {
+      await axios.post('http://localhost:8080/user/signup', formDataBody, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      //take him to login page
+      navigateUser('/login');
+    } catch (er) {
+      console.log('SOmething wrong happened' + er.message);
+    }
   };
 
   return (
@@ -127,6 +155,7 @@ function SignupForm() {
         </div>
 
         {/* Submit Button */}
+        <p className="text-red">{error}</p>
         <button
           type="submit"
           className="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -142,4 +171,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default SignUpPage;
