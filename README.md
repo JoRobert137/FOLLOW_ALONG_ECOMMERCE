@@ -118,3 +118,10 @@ Steps taken to accomplish these tasks :
 ## Milestone 19 - Created Cart UI
 1. Created a Cart UI in the frontend.
 2. Added and fetched cart details of a specific user after they log in.
+
+## Milestone 20 - Added Profile Component
+1. Created a backedn endpoint to send user data.
+2. Created a UI page in the frontend to display the user profile.
+3. Added a link for the profile page in the navbar.
+4. This page displays all the details of the user.
+5. For address, it displays "No address found" .
