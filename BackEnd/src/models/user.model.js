@@ -19,7 +19,7 @@ Name: {type: String, require: true ['please enter your name...']},
     {addressType:String},
  ],
  
- role: {type: String, default: 'user'},
+ role: {type: String, default: 'User'},
  avatar:{
     url:{type: String,require: true},
     public_id:{type:String,require:true},
