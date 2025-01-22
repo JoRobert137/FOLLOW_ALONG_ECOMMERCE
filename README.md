@@ -74,7 +74,7 @@ Steps taken to accomplish these tasks :
 2. This was done by creating a new page called 'ProductEntryPage'and necessary code was written for the same.
 2. Takes in both descryptive details as well as images of the products.
 
-## Milesttone 10 - Created Endpoint for Updating DB
+## Milestone 10 - Created Endpoint for Updating DB
 1. Created a product schema to get details of the product.
 2. Using this schema, the product details are stored in the DB.
 3. Also used cloudinary for initiating multer and store uploaded files in the 'temp-uploads' folder.
@@ -112,6 +112,16 @@ Steps taken to accomplish these tasks :
 2. Updated cart route to visit cart page.
 3. Created cart controller to control any updation in cart.
 
-## Milestone 18 - Created Cart UI
+## Milestone 18 - Cart Data Route Added
+1. Added the route necessary for fetching and updating cart data.
+
+## Milestone 19 - Created Cart UI
 1. Created a Cart UI in the frontend.
 2. Added and fetched cart details of a specific user after they log in.
+
+## Milestone 20 - Added Profile Component
+1. Created a backedn endpoint to send user data.
+2. Created a UI page in the frontend to display the user profile.
+3. Added a link for the profile page in the navbar.
+4. This page displays all the details of the user.
+5. For address, it displays "No address found" .
