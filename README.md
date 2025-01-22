@@ -106,3 +106,8 @@ Steps taken to accomplish these tasks :
 2. On clicking, Fetches the data and shows in the single product page in a manner which it is written.
 3. Multiple images can be seen by using the leftArrow and rightArrow functions.
 4. The images also have the Modal feature where the background goes dark while viewing the image.
+
+## Milestone 17 - Added Cart Components
+1. Created a cart Schema.
+2. Updated cart route to visit cart page.
+3. Created cart controller to control any updation in cart.

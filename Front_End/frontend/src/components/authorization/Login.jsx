@@ -16,7 +16,8 @@ function LoginPage() {
       [name]: value,
     });
   };
-  const handleClickLogin = async () => {
+  const handleClickLogin = async (e) => {
+    e.preventDefault();
     try {
           // axios request to backend
           const response = await axios.post('http://localhost:8080/user/login', credentials);
