@@ -111,3 +111,7 @@ Steps taken to accomplish these tasks :
 1. Created a cart Schema.
 2. Updated cart route to visit cart page.
 3. Created cart controller to control any updation in cart.
+
+## Milestone 18 - Created Cart UI
+1. Created a Cart UI in the frontend.
+2. Added and fetched cart details of a specific user after they log in.
