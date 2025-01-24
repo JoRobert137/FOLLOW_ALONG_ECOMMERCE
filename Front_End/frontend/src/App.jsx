@@ -1,13 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './Pages/HomePage';
-import Signup from './Pages/Signup';
-import Login from './Pages/Login';
+import HomePage from './pages/HomePage.jsx';
+import Signup from './pages/SignUp.jsx';
+import Login from './pages/Login.jsx';
 import ProductEntryPage from './pages/ProductEntryPage';
-import UpdateForm from './Pages/UpdateForm';
+import UpdateForm from './pages/UpdateForm.jsx';
 import Navbar from './components/Navbar/Navbar';
 import SinglePageProduct from './pages/SingleProductPage';
 import CartPage from './pages/CartPage';
 import ProfilePage from './pages/Profile.jsx';
+import AddressCard from './components/AddressComp/AddressCard.jsx';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/product-details/:id" element={<SinglePageProduct />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/address" element={<AddressCard />} />
       </Routes>
     </>
   );
