@@ -1,25 +1,42 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const AddressCard = () => {
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
-  const [add1, setAdd1] = useState("");
-  const [add2, setAdd2] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [addressType, setAddressType] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const addressData = {
-      city,
-      country,
-      address1: add1,
-      address2: add2,
-      zipCode,
-      addressType,
-    };
-    console.log(addressData);
+    const [city, setCity] = useState("");
+    const [country, setCountry] = useState("");
+    const [add1, setAdd1] = useState("");
+    const [add2, setAdd2] = useState("");
+    const [zipCode, setZipCode] = useState("");
+    const [addressType, setAddressType] = useState("");
+    
+    const navigate = useNavigate();
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const addressData = {
+            city,
+            country,
+            address1: add1,
+            address2: add2,
+            zipCode,
+            addressType,
+        };
+        console.log(addressData);
+        const token = localStorage.getItem('token');
+        if(!token){
+            return alert('Token Missing');
+        }
+        
+        const response = await axios.post(
+            `http://localhost:8080/user/add-address?token=${token}`,
+            addressData
+        );
+    navigate('/profile');
   };
+
 
   const styles = {
     card: {
@@ -67,6 +84,8 @@ const AddressCard = () => {
       backgroundColor: "#0056b3",
     },
   };
+
+  
 
   return (
     <div style={styles.card}>
