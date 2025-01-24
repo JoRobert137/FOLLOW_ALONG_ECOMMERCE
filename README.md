@@ -125,3 +125,7 @@ Steps taken to accomplish these tasks :
 3. Added a link for the profile page in the navbar.
 4. This page displays all the details of the user.
 5. For address, it displays "No address found" .
+
+## Milestone 21 - Created Address Form
+1. Created a file named AddressCard.jsx under the components folder.
+2. Cretaed a form which uses useState and updates the address of the user.
