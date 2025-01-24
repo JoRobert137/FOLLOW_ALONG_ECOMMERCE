@@ -129,3 +129,8 @@ Steps taken to accomplish these tasks :
 ## Milestone 21 - Created Address Form
 1. Created a file named AddressCard.jsx under the components folder.
 2. Cretaed a form which uses useState and updates the address of the user.
+
+## Milestone 22 - Added Endpoitn for adding User Adress.
+1. Coded the backend endpoint for adding addresses for users.
+2. User authentication for adding address done by sending the token as a param while posting.
+3. Once the address is added, the same is fetched and displayed in the Profile Page under Adresses.  

@@ -10,13 +10,27 @@ Name: {type: String, require: true ['please enter your name...']},
  },
 
  password: {type: String, require: [true, 'Please enter the password...']},
- address:[
-    {city:String},
-    {country:String},
-    {add1:String},
-    {add2:String},
-    {zipCode:String},
-    {addressType:String},
+ address: [
+   {
+     city: {
+       type: String,
+     },
+     country: {
+       type: String,
+     },
+     address1: {
+       type: String,
+     },
+     address2: {
+       type: String,
+     },
+     zipCode: {
+       type: Number,
+     },
+     addressType: {
+       type: String,
+     },
+   },
  ],
  
  role: {type: String, default: 'User'},
