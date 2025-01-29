@@ -138,4 +138,4 @@ Steps taken to accomplish these tasks :
 ## Milestone 23 - Select Address Page Added
 1. Created a page to choose address after adding products to cart.
 2. The page displays all the address stored in the user data.
-3. Added the backend code to fetch the previously existing data and display in the 'select-address' page
+3. Added the backend code to fetch the previously existing data and display in the 'select-address' page.
