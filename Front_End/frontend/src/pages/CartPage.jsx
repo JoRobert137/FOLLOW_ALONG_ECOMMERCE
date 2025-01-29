@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import CartCard from '../components/ProductCard/CartCard.jsx';
 import { Link } from 'react-router-dom';
@@ -24,10 +24,10 @@ function CardPage() {
   }, []);
   return (
     <div>
-      <Link to={'/select-address'}>
-      <button className='bg-slate-800 text-white px-5 py-2 rounded-md ml-40'>
-        Checkout
-      </button>
+      <Link to={`/select-address`}>
+        <button className="bg-slate-800 text-white px-5 py-2 rounded-md ml-40">
+          Checkout
+        </button>
       </Link>
       {UsersCartData?.map((singleCartObject, index) => {
         return (
@@ -40,7 +40,7 @@ function CardPage() {
               originalPrice={singleCartObject.productId.originalPrice}
               discountedPrice={singleCartObject.productId.discountedPrice}
               id={singleCartObject._id}
-              createdBy={"JoRobert"}
+              createdBy={'JoRobert'}
             />
           </div>
         );
