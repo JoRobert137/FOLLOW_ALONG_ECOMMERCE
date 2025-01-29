@@ -130,7 +130,7 @@ Steps taken to accomplish these tasks :
 1. Created a file named AddressCard.jsx under the components folder.
 2. Cretaed a form which uses useState and updates the address of the user.
 
-## Milestone 22 - Added Endpoint for adding User Address.
+## Milestone 22 - Added Endpoint for adding User Address
 1. Coded the backend endpoint for adding addresses for users.
 2. User authentication for adding address done by sending the token as a param while posting.
 3. Once the address is added, the same is fetched and displayed in the Profile Page under Adresses.
@@ -138,4 +138,8 @@ Steps taken to accomplish these tasks :
 ## Milestone 23 - Select Address Page Added
 1. Created a page to choose address after adding products to cart.
 2. The page displays all the address stored in the user data.
-3. Added the backend code to fetch the previously existing data and display in the 'select-address' page
+3. Added the backend code to fetch the previously existing data and display in the 'select-address' page.
+
+## Milestone24 - Created Order Confirmation Page
+1. Created a page to check the products which were already added to cart.
+2. It also displays the total cost of all the products which are to be ordered.

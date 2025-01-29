@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+
 import { Link } from 'react-router-dom';
 import { X, ArrowDown, RotateCcw } from 'lucide-react';
 export default function CartCard({
   title,
-  image,
+  images,
   Index,
   description,
   originalPrice,
@@ -20,7 +21,7 @@ export default function CartCard({
         <div className="relative w-64">
           <Link to={`/product-details/${id}`}>
             <img
-              src={image}
+              src={typeof images == 'string' ? images : images[0]}
               alt="Product Image"
               className="rounded-lg object-cover"
             />
