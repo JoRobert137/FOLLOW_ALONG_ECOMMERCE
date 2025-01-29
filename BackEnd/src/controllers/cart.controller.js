@@ -15,8 +15,8 @@ async function AddToCartController(req, res) {
         .send({ message: 'Send Valid User ID', success: false });
     }
 
-    const checkUSerpresent = await UserModel.findOne({ _id: userId });
-    if (!checkUSerpresent) {
+    const checkUserpresent = await UserModel.findOne({ _id: userId });
+    if (!checkUserpresent) {
       return res
         .status(401)
         .send({ message: 'Un-Authorized Please signup', success: false });
@@ -52,9 +52,9 @@ async function GetProductsForUser(req, res) {
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(401).send({ message: 'Un-Authorized Plese signup' });
     }
-    const checkUserPresrnt = await UserModel.findOne({ _id: userId });
+    const checkUserPresent = await UserModel.findOne({ _id: userId });
 
-    if (!checkUserPresrnt) {
+    if (!checkUserPresent) {
       return res.status(401).send({ message: 'Un-Authorized Plese signup' });
     }
 
