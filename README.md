@@ -143,3 +143,9 @@ Steps taken to accomplish these tasks :
 ## Milestone24 - Created Order Confirmation Page
 1. Created a page to check the products which were already added to cart.
 2. It also displays the total cost of all the products which are to be ordered.
+
+## Milestone 25 - Added Endpoint for receiving products details.
+1. Created a product model/schema for storing the data of the items which are to be orderd.
+2. Created a product controller for handling the porcess of checking if the products exists or not.
+3. different prodicts can be added to the same address.
+4. Also added a mailing system to retrieve the id of the user.
