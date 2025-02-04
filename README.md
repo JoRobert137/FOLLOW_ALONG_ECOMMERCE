@@ -149,3 +149,8 @@ Steps taken to accomplish these tasks :
 2. Created a product controller for handling the porcess of checking if the products exists or not.
 3. different prodicts can be added to the same address.
 4. Also added a mailing system to retrieve the id of the user.
+
+## Milestone 26 - Added Endpoint for Receiving User Mails.
+1.  Created an user endpoint for receving mails from the user's end.
+2. This mail allows us the retrive the user_id from the database.
+3. Using the id, all the orders placed from the user's side can be fetched.
