@@ -36,7 +36,7 @@ async function CreateOrderController(req, res) {
     const ItemsMapped = Items.map(async (eachItem) => {
       return await CartModel.findByIdAndDelete({ _id: eachItem._id })
     });
-    const checkDeletedItems = await Promise.all(ItemsMapped);
+    const checkDeletedItems = await Promise.all(ItemsMapped)
 
     return res
       .status(201)
@@ -49,7 +49,7 @@ async function CreateOrderController(req, res) {
 async function GetUserOrdersController(req, res) {
     const userId = req.UserId;
     try {
-      if (!mongoose.Types.ObjectId.isValid) {
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res
           .status(400)
           .send({ message: 'In valid user id', success: false });
@@ -60,10 +60,14 @@ async function GetUserOrdersController(req, res) {
           .status(400)
           .send({ message: 'Please sign up', success: false });
       }
-      const orders = await OrderModel.find({ 
-        user: userId,
-        orderStatus: { $ne: 'Cancelled'},
-       }).populate('orderItems');
+      const orders = await OrderModel.find(
+        {
+          user: userId,
+          orderStatus: { $ne: 'Cancelled' },
+        },
+        { orderStatus: 1, orderItems: 1 }
+      ).populate('orderItems');
+
       return res
         .status(200)
         .send({ message: 'Data Successfully fetched', success: true, orders });
@@ -72,8 +76,39 @@ async function GetUserOrdersController(req, res) {
     }
   }
 
-
-module.exports = {
+  async function CancelOrder(req, res) {
+    const userId = req.UserId;
+    const orderId = req.query.orderId;
+    try {
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res
+          .status(400)
+          .send({ message: 'InValid User Id', success: false });
+      }
+      if (!mongoose.Types.ObjectId.isValid(orderId)) {
+        return res
+          .status(400)
+          .send({ message: 'InValid Order Id', success: false });
+      }
+      await OrderModel.findByIdAndUpdate(
+        { _id: orderId },
+        {
+          orderStatus: 'Cancelled',
+        },
+        {
+          new: true,
+        }
+      );
+      return res
+        .status(200)
+        .send({ message: 'Order cancelled successfully..', success: true });
+    } catch (er) {
+      return res.status(500).send({ message: er.message, success: false });
+    }
+  }
+  
+  module.exports = {
     CreateOrderController,
-    GetUserOrdersController
-};
+    GetUserOrdersController,
+    CancelOrder,
+  };

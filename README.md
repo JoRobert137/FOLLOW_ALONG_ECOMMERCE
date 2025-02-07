@@ -159,3 +159,12 @@ Steps taken to accomplish these tasks :
 1. Created an 'Orders' page to display all the user's orders.
 2. This page is connected to the the endpoint created in the previous milestone.
 3. Also added orders page to the navbar for easy navigation.
+
+## Milestone 28 - Created Cancel Button.
+1. Created a cancel button for every order in the user's order page.
+2. Created a backend endpoint to handle deleting the order.
+3. Entire process iso carried out using the user id and the order id.
+4. If order already cancelled, then button won't be displayed.
+
+
+
