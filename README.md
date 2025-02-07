@@ -154,3 +154,8 @@ Steps taken to accomplish these tasks :
 1.  Created an user endpoint for receving mails from the user's end.
 2. This mail allows us the retrive the user_id from the database.
 3. Using the id, all the orders placed from the user's side can be fetched.
+
+## Milestone 27 - Created Orders Page.
+1. Created an 'Orders' page to display all the user's orders.
+2. This page is connected to the the endpoint created in the previous milestone.
+3. Also added orders page to the navbar for easy navigation.
