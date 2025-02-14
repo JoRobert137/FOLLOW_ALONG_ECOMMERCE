@@ -168,5 +168,5 @@ Steps taken to accomplish these tasks :
 
 ## MIlestone 29 - Integrated Payment Gateway.
 1. A Razorpay account was created, and access to the Razorpay Developer Dashboard was obtained.  
-3. On the order confirmation page, two payment options of online payment was added.  
-4. When clicked on the confirm order button, the payment gateway would open and allow the user to make an online payment for the saeme.
+2. On the order confirmation page, two payment options of online payment was added.  
+3. When clicked on the confirm order button, the payment gateway would open and allow the user to make an online payment for the saeme.
