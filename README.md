@@ -166,7 +166,7 @@ Steps taken to accomplish these tasks :
 3. Entire process iso carried out using the user id and the order id.
 4. If order already cancelled, then button won't be displayed.
 
-## MIlestone 29 - Integrated Payment Gateway.
+## Milestone 29 & 30 - Integrated Payment Gateway.
 1. A Razorpay account was created, and access to the Razorpay Developer Dashboard was obtained.  
 2. On the order confirmation page, two payment options of online payment was added.  
 3. When clicked on the confirm order button, the payment gateway would open and allow the user to make an online payment for the saeme.
