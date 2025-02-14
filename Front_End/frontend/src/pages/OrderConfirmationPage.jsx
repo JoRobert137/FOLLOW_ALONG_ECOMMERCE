@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import CartCard from '../components/ProductCard/CartCard';
 import { useNavigate } from 'react-router-dom';
+import { handlePay } from '../Utils/Razorpay';
 
 export default function OrderConfirmation() {
   const [cartData, setUsersCartData] = useState([]);
@@ -49,6 +50,12 @@ export default function OrderConfirmation() {
       }
     );
     navigate('/order-history');
+    handlePay(total, token, cartData)
+      .then((res) => {
+        navigate('/order-history');
+      })
+      .catch((er) => console.log(er.message));
+    
     console.log(response);
   };
 
@@ -102,6 +109,7 @@ export default function OrderConfirmation() {
             onClick={OrderConfirmation}
           >
             Confirm order
+            Confirm order {total}
           </button>
         </div>
       </div>
