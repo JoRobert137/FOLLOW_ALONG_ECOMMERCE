@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUserEmail } from '../../Redux/User/UserActions';
+import { setEmail } from '../../Redux/User/UsersSlice';
 function LoginPage() {
   const [credentials, setCreds] = useState({
     email: '',
@@ -11,6 +15,8 @@ function LoginPage() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     console.log(name, value);
+    const dispatch = useDispatch();
+
     setCreds({
       ...credentials,
       [name]: value,
@@ -22,8 +28,8 @@ function LoginPage() {
           // axios request to backend
           const response = await axios.post('http://localhost:8080/user/login', credentials);
           localStorage.setItem('token', response.data.token);
-          console.log('Login Successful', response.data);
-          console.log('Navigating to homepage')
+          console.log(credentials);
+          dispatch(setUserEmail(credentials.email));
           navigate('/');
     } catch(er) {
       console.log('Login failed:', er.response?.data || er.message);
