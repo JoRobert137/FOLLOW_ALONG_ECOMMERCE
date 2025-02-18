@@ -1,9 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
 import Card from '../components/ProductCard/Card.jsx';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+
 
 function HomePage() {
   const [data, setdata] = useState();
+  const dataRedux = useSelector((state) => state.user);
 
   const fetchProduct = async () => {
     try {

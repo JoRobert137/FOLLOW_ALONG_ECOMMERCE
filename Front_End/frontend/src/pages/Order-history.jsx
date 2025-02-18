@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import CartCard from '../components/ProductCard/CartCard';
+import { useSelector } from 'react-redux';
+
 
 function OrderHistory() {
   const [OrderedData, SetOrderedData] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const data = useSelector((state) => state.user);
   const fetchedOrderedProducts = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
