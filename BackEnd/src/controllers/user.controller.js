@@ -150,7 +150,11 @@ const login = async (req, res) => {
 
         return res
           .status(200)
-          .cookie('token', token)
+          .cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict',
+          })
           .send({
             message: 'User logged in successfully..',
             success: true,
