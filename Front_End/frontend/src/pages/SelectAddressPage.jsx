@@ -1,9 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AddressList from "../components/AllAddress/Addresses";
+import { useSelector } from 'react-redux';
+
 
 export default function SelectAddress(){
     const [AllAddresses, setAllAddresses] = useState([])
+    const data = useSelector((state) => state.user);
     useEffect(()=>{
         const fetchAddress = async() => {
             const token = localStorage.getItem('token');
