@@ -176,6 +176,10 @@ Steps taken to accomplish these tasks :
 2. Ensure components can access and update global state efficiently without prop drilling.  
 3. Structure the application to handle state management in a scalable and organized manner using Redux.
 
-### Milestone 32 - used Dispatch Method to add mail inside global state.
+## Milestone 32 - Used Dispatch Method to add mail inside global state.
 1. Used useSelector in every page, which has the mail stored in it.
 2. In login page, the dispatch Method is used to store the mail.
+
+## Milestone 33 - Added Cookie inside the response.
+1. Downloaded jsonwebtoken and used sign in method to create a jwd token with email and id.
+2. Also set a maxAge to set expire time.
