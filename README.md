@@ -171,7 +171,11 @@ Steps taken to accomplish these tasks :
 2. On the order confirmation page, two payment options of online payment was added.  
 3. When clicked on the confirm order button, the payment gateway would open and allow the user to make an online payment for the same.
 
-### Milestone 31 - Implemented Global State Management.
+## Milestone 31 - Implemented Global State Management.
 1. Use Redux to store and manage the user's email across the application.  
 2. Ensure components can access and update global state efficiently without prop drilling.  
 3. Structure the application to handle state management in a scalable and organized manner using Redux.
+
+### Milestone 32 - used Dispatch Method to add mail inside global state.
+1. Used useSelector in every page, which has the mail stored in it.
+2. In login page, the dispatch Method is used to store the mail.
