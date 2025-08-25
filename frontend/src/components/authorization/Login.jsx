@@ -4,8 +4,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUserEmail } from '../../Redux/User/UserActions';
-import { setEmail } from '../../Redux/User/UsersSlice';
+import { setUserEmail } from '../../User/UserActions';
+import { setEmail } from '../../User/UsersSlice';
 function LoginPage() {
   const [credentials, setCreds] = useState({
     email: '',

@@ -5,7 +5,7 @@ const {
   createOrder,
   PayOrders,
 } = require('../controllers/Payment.controller.js');
-const verifyUser = require('../middlewares/jwt-verify.js');
+const verifyUser = require('../middlwares/jwt-verify.js');
 //routes post and get
 // orderID
 router.post('/create-order', createOrder);

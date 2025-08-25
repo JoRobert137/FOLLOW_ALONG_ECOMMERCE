@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const verifyUser  = require('../middlwares/jwt-verify');
+const verifyUser  = require('../middlwares/jwt-verify.js');
 
 const {
     GetUserOrdersController,
