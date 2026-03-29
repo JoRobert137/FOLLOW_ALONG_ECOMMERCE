@@ -1,117 +1,215 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUserEmail } from '../../User/UserActions';
 import { setEmail } from '../../User/UsersSlice';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+
 function LoginPage() {
-  const [credentials, setCreds] = useState({
-    email: '',
-    password: '',
-  });
+  const [credentials, setCreds] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value);
-    const dispatch = useDispatch();
-
-    setCreds({
-      ...credentials,
-      [name]: value,
-    });
+    setError('');
+    setCreds({ ...credentials, [name]: value });
   };
+
   const handleClickLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
-          // axios request to backend
-          const response = await axios.post('http://localhost:8080/user/login', credentials);
-          localStorage.setItem('token', response.data.token);
-          console.log(credentials);
-          dispatch(setUserEmail(credentials.email));
-          navigate('/');
-    } catch(er) {
-      console.log('Login failed:', er.response?.data || er.message);
+      const response = await axios.post(
+        'http://localhost:8080/user/login',
+        credentials
+      );
+      localStorage.setItem('token', response.data.token);
+      dispatch(setEmail(credentials.email));
+      navigate('/');
+    } catch (er) {
+      setError(er.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="mx-auto h-10 w-auto"
-          src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-          alt="Your Company"
-        />
-        <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-          Login in to your account
-        </h2>
-      </div>
+    <div
+      className="min-h-[85vh] flex items-center justify-center px-4 py-12"
+      style={{ background: 'var(--surface)' }}
+    >
+      <div
+        className="w-full max-w-md animate-fade-in-up"
+        style={{
+          background: 'var(--card)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: 'var(--shadow-xl)',
+          border: '1px solid var(--border)',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Header */}
+        <div
+          className="px-8 pt-10 pb-6 text-center"
+          style={{
+            background: 'var(--gradient-midnight)',
+          }}
+        >
+          <div
+            className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center font-black text-xl"
+            style={{
+              background: 'var(--gradient-amber)',
+              color: 'var(--midnight)',
+            }}
+          >
+            S
+          </div>
+          <h1
+            className="text-2xl font-bold"
+            style={{ color: 'var(--text-inverse)' }}
+          >
+            Welcome Back
+          </h1>
+          <p className="text-sm mt-1" style={{ color: 'var(--slate-light)' }}>
+            Sign in to your ShopSphere account
+          </p>
+        </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleClickLogin}>
+        {/* Form */}
+        <form onSubmit={handleClickLogin} className="px-8 py-8 space-y-5">
+          {error && (
+            <div
+              className="px-4 py-3 rounded-lg text-sm font-medium animate-fade-in"
+              style={{
+                background: 'var(--error-light)',
+                color: 'var(--error)',
+                border: '1px solid rgba(239,68,68,0.2)',
+              }}
+            >
+              {error}
+            </div>
+          )}
+
           <div>
             <label
-              htmlFor="email"
-              className="block text-sm/6 font-medium text-gray-900"
+              htmlFor="login-email"
+              className="block text-sm font-semibold mb-2"
+              style={{ color: 'var(--text-primary)' }}
             >
-              Email address
+              Email Address
             </label>
-            <div className="mt-2">
-              <input
-                type="email"
-                name="email"
-                id="email"
-                autoComplete="email"
-                required
-                value={credentials.email}
-                onChange={handleChange}
-                className=" text-black block w-full rounded-md bg-white px-3 py-1.5 text-base outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-              />
-            </div>
+            <input
+              type="email"
+              name="email"
+              id="login-email"
+              autoComplete="email"
+              required
+              value={credentials.email}
+              onChange={handleChange}
+              placeholder="you@example.com"
+              className="w-full px-4 py-3 rounded-xl text-sm transition-all duration-200 focus:outline-none"
+              style={{
+                background: 'var(--surface)',
+                border: '1.5px solid var(--border)',
+                color: 'var(--text-primary)',
+              }}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--amber)')}
+              onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
+            />
           </div>
 
           <div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-2">
               <label
-                htmlFor="password"
-                className="block text-sm/6 font-medium text-gray-900"
+                htmlFor="login-password"
+                className="block text-sm font-semibold"
+                style={{ color: 'var(--text-primary)' }}
               >
                 Password
               </label>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot password?
-                </a>
-              </div>
             </div>
-            <div className="mt-2">
+            <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
-                id="password"
+                id="login-password"
                 autoComplete="current-password"
                 required
+                value={credentials.password}
                 onChange={handleChange}
-                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                placeholder="Enter your password"
+                className="w-full px-4 py-3 pr-11 rounded-xl text-sm transition-all duration-200 focus:outline-none"
+                style={{
+                  background: 'var(--surface)',
+                  border: '1.5px solid var(--border)',
+                  color: 'var(--text-primary)',
+                }}
+                onFocus={(e) => (e.target.style.borderColor = 'var(--amber)')}
+                onBlur={(e) => (e.target.style.borderColor = 'var(--border)')}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+                style={{ color: 'var(--slate-light)' }}
+              >
+                {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+              </button>
             </div>
           </div>
 
-          <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-[1.02] active:scale-100 disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{
+              background: 'var(--gradient-amber)',
+              color: 'var(--midnight)',
+              boxShadow: 'var(--shadow-amber)',
+            }}
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
+                </svg>
+                Signing in...
+              </span>
+            ) : (
+              'Sign In'
+            )}
+          </button>
+
+          <p
+            className="text-center text-sm"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            Don&apos;t have an account?{' '}
+            <Link
+              to="/signup"
+              className="font-semibold transition-colors"
+              style={{ color: 'var(--amber-dark)' }}
             >
-              Log in
-            </button>
-          </div>
-          <p className="text-center">
-            Do not have an account ? <Link to={'/signup'}>Sign Up</Link>
+              Create one
+            </Link>
           </p>
         </form>
       </div>

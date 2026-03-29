@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-if (process.env.NODE !== 'PRODUCTION') {
+
+if (process.env.NODE_ENV !== 'PRODUCTION') {
   require('dotenv').config({
     path: './config/.env',
   });
@@ -7,17 +8,23 @@ if (process.env.NODE !== 'PRODUCTION') {
 
 const verifyUser = (req, res, next) => {
   const { token } = req.query;
-  console.log(req.query);
+
   if (!token) {
-    return res.status(404).send({ message: 'Send token over rqeuest' });
+    return res
+      .status(401)
+      .send({ message: 'Authentication required. Please send a token.', success: false });
   }
 
-  const data = jwt.verify(token, process.env.SECRET_KEY);
-  console.log(data);
-  req.UserId = data.id; // Extract userId from token payload
-  req.userEmailAddress = data.email;
-  //   req.body.userEmailAddress
-  next();
+  try {
+    const data = jwt.verify(token, process.env.SECRET_KEY);
+    req.UserId = data.id;
+    req.userEmailAddress = data.email;
+    next();
+  } catch (err) {
+    return res
+      .status(403)
+      .send({ message: 'Invalid or expired token.', success: false });
+  }
 };
 
 module.exports = verifyUser;

@@ -21,7 +21,7 @@ async function CreateUSer(req, res) {
   if (CheckUserPresent) {
     const error = new ErrorHandler('Already Present in DB', 400);
 
-    return res.status(404).send({
+    return res.status(400).send({
       message: error.message,
       status: error.statusCode,
       success: false,
@@ -40,11 +40,11 @@ async function CreateUSer(req, res) {
   };
   const token = generateToken(data);
   await transporter.sendMail({
-    to: 'kodagian1137@gmail.com',
+    to: email,
     from: 'kodagian1137@gmail.com',
-    subject: 'Verification email from Follow-Along project',
-    text: 'Text',
-    html: `<h1>Hello world   http://localhost:5173/activation/${token} </h1>`,
+    subject: 'Verification email from ShopSphere',
+    text: 'Verify your account',
+    html: `<h1>Hello ${Name}! Click <a href="http://localhost:5173/activation/${token}">here</a> to verify your email.</h1>`,
   });
 
   await newUser.save();
@@ -54,16 +54,18 @@ async function CreateUSer(req, res) {
 
 const generateToken = (data) => {
   const token = jwt.sign(
-    { name: data.name, email: data.email, id: data.id },
-    process.env.SECRET_KEY
+    { name: data.name || data.Name, email: data.email, id: data.id },
+    process.env.SECRET_KEY,
+    { expiresIn: '7d' }
   );
   return token;
 };
+
 const verifyUser = (token) => {
-  const verify = jwt.verify(token, process.env.SECRET_KEY);
-  if (verify) {
+  try {
+    const verify = jwt.verify(token, process.env.SECRET_KEY);
     return verify;
-  } else {
+  } catch (err) {
     return false;
   }
 };
@@ -90,7 +92,7 @@ const signup = async (req, res) => {
     if (checkUserPresentinDB) {
       return res.status(403).send({ message: 'User already present' });
     }
-    console.log(req.file, process.env.cloud_name);
+
     const ImageAddress = await cloudinary.uploader
       .upload(req.file.path, {
         folder: 'uploads',
@@ -99,8 +101,6 @@ const signup = async (req, res) => {
         fs.unlinkSync(req.file.path);
         return result.url;
       });
-
-    console.log('url', ImageAddress);
 
     bcrypt.hash(password, 10, async function (err, hashedPassword) {
       try {
@@ -122,24 +122,34 @@ const signup = async (req, res) => {
         return res.status(500).send({ message: er.message });
       }
     });
-
-    //
   } catch (er) {
     console.log(er);
     return res.status(500).send({ message: er.message });
   }
 };
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const checkUserPresentinDB = await UserModel.findOne({ email: email });
+
+    if (!checkUserPresentinDB) {
+      return res
+        .status(404)
+        .send({ message: 'User not found. Please sign up.', success: false });
+    }
 
     bcrypt.compare(
       password,
       checkUserPresentinDB.password,
       function (err, result) {
         if (err) {
-          return res.status(403).send({ message: er.message, success: false });
+          return res.status(403).send({ message: err.message, success: false });
+        }
+        if (!result) {
+          return res
+            .status(401)
+            .send({ message: 'Invalid credentials.', success: false });
         }
         let data = {
           id: checkUserPresentinDB._id,
@@ -167,7 +177,6 @@ const login = async (req, res) => {
   }
 };
 
-
 const getUserData = async (req, res) => {
   const userId = req.UserId;
   try {
@@ -186,15 +195,15 @@ const getUserData = async (req, res) => {
   }
 };
 
-const AddAddressController = async(req, res) => {
+const AddAddressController = async (req, res) => {
   const userId = req.UserId;
-  const {city, country, address1, address2, zipCode, addressType} = req.body;
+  const { city, country, address1, address2, zipCode, addressType } = req.body;
   try {
-    const userFindOne = await UserModel.findOne({_id: userId});
-    if(!userFindOne){
+    const userFindOne = await UserModel.findOne({ _id: userId });
+    if (!userFindOne) {
       return res
         .status(404)
-        .send({message: "User not found", success: false});
+        .send({ message: 'User not found', success: false });
     }
 
     const userAddress = {
@@ -211,40 +220,71 @@ const AddAddressController = async(req, res) => {
 
     return res
       .status(201)
-      .send({message: "User Address Added", success: true, response})
-  } catch(er){
+      .send({ message: 'User Address Added', success: true, response });
+  } catch (er) {
     return res.status(500).send({ message: er.message });
   }
-}
+};
 
 const GetAddressController = async (req, res) => {
-  const userId = req.UserId
+  const userId = req.UserId;
   try {
-    if(!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(401).send({message: "Please login, un-authorised"})
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(401).send({ message: 'Please login, un-authorised' });
     }
 
-    const checkUser = await UserModel.findOne({_id: userId}, {address: 1});
-    if(!checkUser){
-      return res.status(401).send({message: 'Please signup, un-authorised'})
+    const checkUser = await UserModel.findOne({ _id: userId }, { address: 1 });
+    if (!checkUser) {
+      return res.status(401).send({ message: 'Please signup, un-authorised' });
     }
 
     return res.status(200).send({
       userInfo: checkUser,
-      message: "Success",
+      message: 'Success',
       success: true,
-    })
+    });
   } catch (er) {
-    return res.status(500). send({message: er.message})
+    return res.status(500).send({ message: er.message });
   }
-}
+};
 
-module.exports = { 
+const DeleteAddressController = async (req, res) => {
+  const userId = req.UserId;
+  const addressId = req.params.id;
+  try {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(401).send({ message: 'Please login, un-authorised' });
+    }
+
+    const user = await UserModel.findOne({ _id: userId });
+    if (!user) {
+      return res
+        .status(404)
+        .send({ message: 'User not found', success: false });
+    }
+
+    user.address = user.address.filter(
+      (addr) => addr._id.toString() !== addressId
+    );
+    await user.save();
+
+    return res.status(200).send({
+      message: 'Address deleted successfully',
+      success: true,
+      address: user.address,
+    });
+  } catch (er) {
+    return res.status(500).send({ message: er.message });
+  }
+};
+
+module.exports = {
   CreateUSer,
-  verifyUserController, 
-  signup, 
-  login, 
-  getUserData, 
-  AddAddressController, 
-  GetAddressController
+  verifyUserController,
+  signup,
+  login,
+  getUserData,
+  AddAddressController,
+  GetAddressController,
+  DeleteAddressController,
 };

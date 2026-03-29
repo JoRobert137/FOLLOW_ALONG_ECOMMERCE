@@ -1,196 +1,253 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaShieldAlt, FaMapMarkerAlt, FaPlus, FaTrash } from 'react-icons/fa';
 
-const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-lg shadow-lg p-6 ${className}`}>
-    {children}
-  </div>
-);
-
-const IconWrapper = ({ children }) => (
-  <div className="bg-gray-100 p-2 rounded-full">{children}</div>
-);
-
-const InfoSection = ({ icon, label, value }) => (
-  <div className="flex items-center gap-3">
-    <IconWrapper>{icon}</IconWrapper>
-    <div>
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-gray-900">{value}</p>
-    </div>
-  </div>
-);
 export function ProfileCard() {
   const [userData, setUserData] = useState({});
+  const [loading, setLoading] = useState(true);
+
   const getUserData = async () => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      return alert('Token missing login');
+    if (!token) return alert('Token missing, please login');
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/user/user-data?token=${token}`
+      );
+      setUserData(response.data.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-    const response = await axios.get(
-      `http://localhost:8080/user/user-data?token=${token}`
-    );
-
-    setUserData(response.data.data);
   };
-  const data = useSelector((state) => state.user);
-  console.log(data);
+
   useEffect(() => {
     getUserData();
   }, []);
 
   const handleDeleteAddy = async (id) => {
     const token = localStorage.getItem('token');
+    if (!token) return alert('Token missing');
     try {
-      if (!token) {
-        return alert('Token missing');
-      }
-      const response = await axios.delete(
+      await axios.delete(
         `http://localhost:8080/user/delete-address/${id}?token=${token}`
       );
       getUserData();
     } catch (er) {
-      console.log(er.response.message);
+      console.error(er);
     }
   };
+
+  if (loading) {
+    return (
+      <div
+        className="min-h-[60vh] flex items-center justify-center"
+        style={{ background: 'var(--surface)' }}
+      >
+        <div className="animate-spin w-10 h-10 rounded-full" style={{ border: '3px solid var(--border)', borderTopColor: 'var(--amber)' }} />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <Card className="max-w-2xl mx-auto">
-        {/* Header Section */}
+    <div className="min-h-[70vh]" style={{ background: 'var(--surface)' }}>
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-        <div className="flex items-center gap-4 mb-8">
-          <div className="bg-blue-100 p-4 rounded-full">
-            {/* <svg
-              className="w-12 h-12 text-blue-600"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
+        {/* Profile Header */}
+        <div
+          className="relative overflow-hidden animate-fade-in-up"
+          style={{
+            background: 'var(--gradient-midnight)',
+            borderRadius: 'var(--radius-xl)',
+            padding: '2rem',
+            marginBottom: '1.5rem',
+          }}
+        >
+          <div className="flex items-center gap-5 relative z-10">
+            <div
+              className="w-20 h-20 rounded-2xl overflow-hidden shrink-0"
+              style={{
+                border: '3px solid var(--amber)',
+                boxShadow: 'var(--shadow-amber)',
+              }}
             >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg> */}
-            <img
-              src={userData?.avatar?.url}
-              alt=""
-              className="w-20 rounded-lg"
-            />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {userData.Name}
-            </h1>
-            <span className="text-gray-500 capitalize">{userData.role}</span>
-          </div>
-        </div>
-        {/* Info Sections */}
-        <div className="space-y-6">
-          <InfoSection
-            icon={
-              <svg
-                className="w-5 h-5 text-gray-600"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-            }
-            label="User ID"
-            value={<span className="font-mono text-sm">{userData._id}</span>}
-          />
-
-          <InfoSection
-            icon={
-              <svg
-                className="w-5 h-5 text-gray-600"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-            }
-            label="Email"
-            value={userData.email}
-          />
-
-          <InfoSection
-            icon={
-              <svg
-                className="w-5 h-5 text-gray-600"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            }
-            label="Role"
-            value={<span className="capitalize">{userData.role}</span>}
-          />
-
-          <InfoSection
-            icon={
-              <svg
-                className="w-5 h-5 text-gray-600"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-            }
-            label="Addresses"
-            value={
-              userData?.address?.length > 0 ? (
-                <ul className="list-disc list-inside">
-                  {userData.address.map((SingleAddy, index) => (
-                    <div key={index}>
-                      <button onClick={() => handleDeleteAddy(SingleAddy._id)}>
-                        Delete 👇🏻
-                      </button>
-                      <li key={SingleAddy._id}>City: {SingleAddy.city}</li>
-                      <li key={SingleAddy._id}>
-                        Country: {SingleAddy.country}
-                      </li>
-                      <li key={SingleAddy._id}>
-                        Address 1: {SingleAddy.address1}
-                      </li>
-                      <li key={SingleAddy._id}>
-                        Address 2: {SingleAddy.address2}
-                      </li>
-                      <li key={SingleAddy._id}>
-                        Pin Code: {SingleAddy.zipCode}
-                      </li>
-                      <br />
-                    </div>
-                  ))}
-                </ul>
+              {userData?.avatar?.url ? (
+                <img
+                  src={userData.avatar.url}
+                  alt={userData.Name}
+                  className="w-full h-full object-cover"
+                />
               ) : (
-                <span className="text-gray-400 italic">
-                  No addresses Founded
-                </span>
-              )
-            }
-          />
+                <div
+                  className="w-full h-full flex items-center justify-center text-2xl font-black"
+                  style={{
+                    background: 'var(--gradient-amber)',
+                    color: 'var(--midnight)',
+                  }}
+                >
+                  {userData.Name?.charAt(0)?.toUpperCase()}
+                </div>
+              )}
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--text-inverse)' }}>
+                {userData.Name}
+              </h1>
+              <span
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize mt-1"
+                style={{
+                  background: 'var(--amber-glow)',
+                  color: 'var(--amber)',
+                }}
+              >
+                <FaShieldAlt size={10} />
+                {userData.role}
+              </span>
+            </div>
+          </div>
+          {/* Decorative */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full opacity-5" style={{ background: 'var(--amber)' }} />
         </div>
-        {/* Edit Button */}
-        <button className="mt-8 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-          Edit Profile
-        </button>
-      </Card>
+
+        {/* Info Cards */}
+        <div className="space-y-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          {/* Email */}
+          <div
+            className="flex items-center gap-4 p-4"
+            style={{
+              background: 'var(--card)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-card)',
+              border: '1px solid var(--border-light)',
+            }}
+          >
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: 'var(--amber-glow)' }}
+            >
+              <FaEnvelope size={16} style={{ color: 'var(--amber)' }} />
+            </div>
+            <div>
+              <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Email</p>
+              <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{userData.email}</p>
+            </div>
+          </div>
+
+          {/* User ID */}
+          <div
+            className="flex items-center gap-4 p-4"
+            style={{
+              background: 'var(--card)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-card)',
+              border: '1px solid var(--border-light)',
+            }}
+          >
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{ background: 'var(--amber-glow)' }}
+            >
+              <FaUser size={16} style={{ color: 'var(--amber)' }} />
+            </div>
+            <div>
+              <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>User ID</p>
+              <p className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>{userData._id}</p>
+            </div>
+          </div>
+
+          {/* Addresses */}
+          <div
+            className="p-5"
+            style={{
+              background: 'var(--card)',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-card)',
+              border: '1px solid var(--border-light)',
+            }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: 'var(--amber-glow)' }}
+                >
+                  <FaMapMarkerAlt size={16} style={{ color: 'var(--amber)' }} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                    Addresses
+                  </p>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                    {userData.address?.length || 0} saved
+                  </p>
+                </div>
+              </div>
+              <Link
+                to="/add-address"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 hover:scale-105"
+                style={{
+                  background: 'var(--gradient-amber)',
+                  color: 'var(--midnight)',
+                }}
+              >
+                <FaPlus size={10} />
+                Add
+              </Link>
+            </div>
+
+            {userData.address?.length > 0 ? (
+              <div className="space-y-3">
+                {userData.address.map((SingleAddy, index) => (
+                  <div
+                    key={SingleAddy._id || index}
+                    className="flex items-start justify-between p-3 rounded-xl"
+                    style={{
+                      background: 'var(--surface)',
+                      border: '1px solid var(--border-light)',
+                    }}
+                  >
+                    <div>
+                      <p className="text-xs font-semibold capitalize mb-1" style={{ color: 'var(--amber-dark)' }}>
+                        {SingleAddy.addressType || 'Address'}
+                      </p>
+                      <p className="text-sm" style={{ color: 'var(--text-primary)' }}>
+                        {SingleAddy.address1}
+                      </p>
+                      {SingleAddy.address2 && (
+                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                          {SingleAddy.address2}
+                        </p>
+                      )}
+                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {SingleAddy.city}, {SingleAddy.zipCode}
+                      </p>
+                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {SingleAddy.country}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteAddy(SingleAddy._id)}
+                      className="p-2 rounded-lg transition-all duration-200 hover:scale-110 shrink-0"
+                      style={{
+                        background: 'var(--error-light)',
+                        color: 'var(--error)',
+                      }}
+                    >
+                      <FaTrash size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-center py-4" style={{ color: 'var(--text-muted)' }}>
+                No addresses saved yet
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

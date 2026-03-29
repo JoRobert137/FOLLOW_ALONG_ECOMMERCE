@@ -1,139 +1,281 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { FaShoppingCart, FaUserCircle, FaSearch, FaHeart } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { FaShoppingCart, FaUserCircle, FaSearch, FaHeart, FaBars, FaTimes } from 'react-icons/fa';
 
 function Navbar({ cartCount = 0 }) {
   const [profileOpen, setProfileOpen] = useState(false);
-  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('token');
 
-  const toggleProfile = () => setProfileOpen(!profileOpen);
-  const toggleCategory = () => setCategoryOpen(!categoryOpen);
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClick = () => setProfileOpen(false);
+    if (profileOpen) {
+      document.addEventListener('click', handleClick);
+      return () => document.removeEventListener('click', handleClick);
+    }
+  }, [profileOpen]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setProfileOpen(false);
+    navigate('/login');
+  };
 
   const navLinks = [
     { name: 'Home', to: '/' },
-    { name: 'My Products', to: '/myproducts' },
-    { name: 'Add Products', to: '/addproducts' },
+    { name: 'Add Product', to: '/product-entry-page' },
+    { name: 'Orders', to: '/order-history' },
   ];
 
-  const categories = ['Electronics', 'Fashion', 'Books', 'Home', 'Toys'];
-
   return (
-    <nav className="bg-blue-600 shadow-md sticky top-0 z-50">
+    <nav
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'shadow-lg'
+          : ''
+      }`}
+      style={{
+        background: 'var(--gradient-midnight)',
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20 items-center">
-
+        <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <NavLink to="/" className="flex items-center text-white font-bold text-2xl space-x-2">
-            <span>E-Com</span>
+          <NavLink
+            to="/"
+            className="flex items-center gap-2 group"
+            style={{ textDecoration: 'none' }}
+          >
+            <div
+              className="w-9 h-9 rounded-lg flex items-center justify-center font-black text-sm"
+              style={{
+                background: 'var(--gradient-amber)',
+                color: 'var(--midnight)',
+              }}
+            >
+              S
+            </div>
+            <span
+              className="text-xl font-bold tracking-tight"
+              style={{ color: 'var(--text-inverse)' }}
+            >
+              Shop<span style={{ color: 'var(--amber)' }}>Sphere</span>
+            </span>
           </NavLink>
 
-          {/* Desktop Links + Search */}
-          <div className=" md:flex md:items-center md:space-x-8 flex-1 mx-6">
-
-            {/* Navigation Links */}
-            {navLinks.map((link, idx) => (
+          {/* Desktop Links */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
               <NavLink
-                key={idx}
+                key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
-                  isActive
-                    ? 'text-white font-semibold px-4 py-2 rounded-md transition-colors duration-200'
-                    : 'text-gray-200 hover:text-white px-4 py-2 rounded-md transition-colors duration-200'
+                  `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? ''
+                      : ''
+                  }`
                 }
+                style={({ isActive }) => ({
+                  color: isActive ? 'var(--amber)' : 'var(--text-inverse)',
+                  background: isActive ? 'var(--amber-glow)' : 'transparent',
+                })}
               >
                 {link.name}
               </NavLink>
             ))}
+          </div>
 
-            {/* Categories Dropdown */}
-            <div className="relative">
-              <button
-                onClick={toggleCategory}
-                className="text-gray-200 hover:text-white px-4 py-2 rounded-md font-semibold flex items-center"
-              >
-                Categories
-              </button>
-              {categoryOpen && (
-                <div className="absolute top-full mt-1 bg-white text-gray-800 rounded shadow-md w-48">
-                  {categories.map((cat, idx) => (
-                    <NavLink
-                      key={idx}
-                      to={`/categories/${cat.toLowerCase()}`}
-                      className="block px-4 py-2 hover:bg-blue-100"
-                      onClick={() => setCategoryOpen(false)}
-                    >
-                      {cat}
-                    </NavLink>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Search Bar */}
-            <div className="ml-6 relative ">
-              <FaSearch className="absolute top-2.5 left-3 text-gray-400" />
+          {/* Search Bar */}
+          <div className="hidden lg:flex items-center flex-1 max-w-md mx-6">
+            <div className="relative w-full">
+              <FaSearch
+                className="absolute top-1/2 left-3 -translate-y-1/2"
+                style={{ color: 'var(--slate-light)' }}
+                size={14}
+              />
               <input
                 type="text"
                 placeholder="Search products..."
-                className="pl-10 pr-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 w-80"
+                className="w-full pl-9 pr-4 py-2 rounded-lg text-sm transition-all duration-200 focus:outline-none"
+                style={{
+                  background: 'rgba(255,255,255,0.08)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  color: 'var(--text-inverse)',
+                }}
+                onFocus={(e) => {
+                  e.target.style.background = 'rgba(255,255,255,0.14)';
+                  e.target.style.borderColor = 'var(--amber)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.background = 'rgba(255,255,255,0.08)';
+                  e.target.style.borderColor = 'rgba(255,255,255,0.1)';
+                }}
               />
             </div>
-
           </div>
 
-          {/* Icons + Profile */}
-          <div className="flex items-center space-x-6">
-            <NavLink to="/wishlist" className="text-gray-200 hover:text-white p-2 rounded-full">
-              <FaHeart size={24} />
-            </NavLink>
-
-            <NavLink to="/cart" className="relative text-gray-200 hover:text-white p-2 rounded-full">
-              <FaShoppingCart size={28} />
+          {/* Right Icons */}
+          <div className="flex items-center gap-2">
+            <NavLink
+              to="/cart"
+              className="relative p-2 rounded-lg transition-all duration-200 hover:scale-105"
+              style={{ color: 'var(--text-inverse)' }}
+            >
+              <FaShoppingCart size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-xs text-white rounded-full w-5 h-5 flex items-center justify-center">
+                <span
+                  className="absolute -top-0.5 -right-0.5 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center"
+                  style={{
+                    background: 'var(--gradient-amber)',
+                    color: 'var(--midnight)',
+                  }}
+                >
                   {cartCount}
                 </span>
               )}
             </NavLink>
 
+            {/* Profile Dropdown */}
             <div className="relative">
               <button
-                onClick={toggleProfile}
-                className="text-gray-200 hover:text-white p-2 rounded-full"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setProfileOpen(!profileOpen);
+                }}
+                className="p-2 rounded-lg transition-all duration-200 hover:scale-105"
+                style={{ color: 'var(--text-inverse)' }}
               >
-                <FaUserCircle size={28} />
+                <FaUserCircle size={22} />
               </button>
               {profileOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded shadow-md">
-                  <NavLink
-                    to="/profile"
-                    className="block px-4 py-2 hover:bg-blue-100"
-                    onClick={() => setProfileOpen(false)}
-                  >
-                    Profile
-                  </NavLink>
-                  <NavLink
-                    to="/orders"
-                    className="block px-4 py-2 hover:bg-blue-100"
-                    onClick={() => setProfileOpen(false)}
-                  >
-                    Orders
-                  </NavLink>
-                  <button
-                    className="w-full text-left px-4 py-2 hover:bg-blue-100"
-                    onClick={() => {
-                      setProfileOpen(false);
-                      alert('Logged out!');
-                    }}
-                  >
-                    Logout
-                  </button>
+                <div
+                  className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden animate-slide-down"
+                  style={{
+                    background: 'var(--card)',
+                    boxShadow: 'var(--shadow-xl)',
+                    border: '1px solid var(--border)',
+                  }}
+                >
+                  {isLoggedIn ? (
+                    <>
+                      <NavLink
+                        to="/profile"
+                        className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors"
+                        style={{ color: 'var(--text-primary)' }}
+                        onClick={() => setProfileOpen(false)}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'var(--amber-glow)')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = 'transparent')
+                        }
+                      >
+                        Profile
+                      </NavLink>
+                      <NavLink
+                        to="/order-history"
+                        className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors"
+                        style={{ color: 'var(--text-primary)' }}
+                        onClick={() => setProfileOpen(false)}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'var(--amber-glow)')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = 'transparent')
+                        }
+                      >
+                        Orders
+                      </NavLink>
+                      <button
+                        className="w-full text-left px-4 py-3 text-sm font-medium transition-colors"
+                        style={{ color: 'var(--error)' }}
+                        onClick={handleLogout}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'var(--error-light)')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = 'transparent')
+                        }
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <NavLink
+                        to="/login"
+                        className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors"
+                        style={{ color: 'var(--text-primary)' }}
+                        onClick={() => setProfileOpen(false)}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'var(--amber-glow)')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = 'transparent')
+                        }
+                      >
+                        Login
+                      </NavLink>
+                      <NavLink
+                        to="/signup"
+                        className="flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors"
+                        style={{ color: 'var(--text-primary)' }}
+                        onClick={() => setProfileOpen(false)}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = 'var(--amber-glow)')
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = 'transparent')
+                        }
+                      >
+                        Sign Up
+                      </NavLink>
+                    </>
+                  )}
                 </div>
               )}
             </div>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              className="md:hidden p-2 rounded-lg"
+              style={{ color: 'var(--text-inverse)' }}
+              onClick={() => setMobileOpen(!mobileOpen)}
+            >
+              {mobileOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {mobileOpen && (
+          <div className="md:hidden pb-4 animate-slide-down">
+            <div className="flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  className="px-4 py-3 rounded-lg text-sm font-medium"
+                  style={{ color: 'var(--text-inverse)' }}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.name}
+                </NavLink>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaStar, FaShoppingCart, FaTrash, FaEdit } from 'react-icons/fa';
 
 function Card({
   title,
@@ -14,92 +15,155 @@ function Card({
 }) {
   const navigate = useNavigate();
 
+  const discount = originalPrice > 0
+    ? Math.round(((originalPrice - discountedPrice) / originalPrice) * 100)
+    : 0;
+
   const handleAddToCart = async () => {
     const token = localStorage.getItem('token');
-  
     if (!token) {
       alert('You must be logged in to add items to the cart.');
       return;
     }
-  
     try {
       await axios.post(
         `http://localhost:8080/cart/add-to-cart?token=${token}`,
         { productId: id, quantity: 1 }
       );
-      console.log('Product Added To Cart Successfully...');
+      alert('Added to cart!');
     } catch (error) {
-      console.error('Error adding product to cart:', error);
-      alert('Failed to add product to cart. Please try again later.');
+      alert(error.response?.data?.message || 'Failed to add to cart.');
     }
+  };
+
+  const renderStars = () => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <FaStar
+        key={i}
+        size={12}
+        style={{
+          color: i < Math.round(rating) ? 'var(--amber)' : 'var(--border)',
+        }}
+      />
+    ));
   };
 
   return (
     <div
-      className="w-80 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer"
+      className="group relative overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+      style={{
+        background: 'var(--card)',
+        borderRadius: 'var(--radius-lg)',
+        boxShadow: 'var(--shadow-card)',
+        border: '1px solid var(--border-light)',
+      }}
       onClick={() => navigate(`/product-details/${id}`)}
     >
-      {/* Image Container */}
-      <div className="relative">
+      {/* Image */}
+      <div className="relative overflow-hidden aspect-[4/5]">
         <img
           src={image}
-          alt="Product"
-          className="w-full h-48 object-cover"
+          alt={title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm font-semibold">
-          -20%
-        </span>
-      </div>
-
-      {/* Content Container */}
-      <div className="p-5">
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">{title}</h3>
-        {/* Description */}
-        <p className="text-gray-600 text-sm mb-4">{description}</p>
-        {/* Rating */}
-        <div className="flex items-center mb-4">
-          <span className="ml-2 text-sm text-gray-600">{rating}</span>
-        </div>
-        {/* Price Section */}
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-xl font-bold text-gray-900">${originalPrice}</span>
-            <span className="ml-2 text-sm text-gray-500 line-through">
-              ₹{discountedPrice}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Buttons */}
-      <div className="p-5 flex justify-between">
-        <button
-          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors duration-200"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent navigation on button click
-            handleAddToCart();
-          }}
-        >
-          Add to Cart
-        </button>
-        <Link to={`/update-form/${id}`}>
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors duration-200"
-            onClick={(e) => e.stopPropagation()} // Prevent navigation on link click
+        {discount > 0 && (
+          <span
+            className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-bold"
+            style={{
+              background: 'var(--gradient-amber)',
+              color: 'var(--midnight)',
+            }}
           >
-            Update
-          </button>
-        </Link>
-        <button
-          className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors duration-200"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent navigation on button click
-            handleDelete(id);
-          }}
+            -{discount}%
+          </span>
+        )}
+        {/* Hover overlay actions */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        <h3
+          className="font-semibold text-sm mb-1 line-clamp-1"
+          style={{ color: 'var(--text-primary)' }}
         >
-          🗑️
-        </button>
+          {title}
+        </h3>
+        <p
+          className="text-xs mb-3 line-clamp-2"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          {description}
+        </p>
+
+        {/* Rating */}
+        <div className="flex items-center gap-1 mb-3">
+          {renderStars()}
+          <span className="text-xs ml-1" style={{ color: 'var(--text-muted)' }}>
+            ({rating})
+          </span>
+        </div>
+
+        {/* Price */}
+        <div className="flex items-baseline gap-2 mb-4">
+          <span
+            className="text-lg font-bold"
+            style={{ color: 'var(--text-primary)' }}
+          >
+            ₹{discountedPrice}
+          </span>
+          {originalPrice && originalPrice !== discountedPrice && (
+            <span
+              className="text-sm line-through"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              ₹{originalPrice}
+            </span>
+          )}
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2">
+          <button
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 hover:scale-[1.02] active:scale-100"
+            style={{
+              background: 'var(--gradient-amber)',
+              color: 'var(--midnight)',
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAddToCart();
+            }}
+          >
+            <FaShoppingCart size={12} />
+            Add to Cart
+          </button>
+          <Link to={`/update-form/${id}`} onClick={(e) => e.stopPropagation()}>
+            <button
+              className="p-2.5 rounded-xl transition-all duration-200 hover:scale-105"
+              style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              <FaEdit size={14} />
+            </button>
+          </Link>
+          <button
+            className="p-2.5 rounded-xl transition-all duration-200 hover:scale-105"
+            style={{
+              background: 'var(--error-light)',
+              color: 'var(--error)',
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(id);
+            }}
+          >
+            <FaTrash size={14} />
+          </button>
+        </div>
       </div>
     </div>
   );

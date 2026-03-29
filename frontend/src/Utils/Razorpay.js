@@ -1,8 +1,7 @@
 import axios from 'axios';
+
 export const handlePay = async (total, token, orderIds) => {
   try {
-    // create order
-    // res->orders[id]
     const createOrdersResponse = await axios.post(
       'http://localhost:8080/payment/create-order',
       {
@@ -11,22 +10,18 @@ export const handlePay = async (total, token, orderIds) => {
       }
     );
     const { amount, id: orderId, currency } = createOrdersResponse.data.orders;
-    // get the keys
-    // key_id and key_secret
+
     const responseKeys = await axios.get(
       'http://localhost:8080/payment/get-razorpay-key'
     );
-    // pay order
-    // make the payment and create a document
     const keys = responseKeys.data;
+
     const options = {
       key: keys.key,
       amount: amount,
       currency: currency,
-      name: 'Ecom Follow along',
-      description: 'Test Transaction',
-      image:
-        'https://cdn.vectorstock.com/i/500p/22/42/eco-green-leaf-concept-vector-1722242.jpg',
+      name: 'ShopSphere',
+      description: 'ShopSphere Payment',
       order_id: orderId,
       handler: async function (response) {
         const result = await axios.post(
@@ -42,20 +37,16 @@ export const handlePay = async (total, token, orderIds) => {
         alert(result.data.message);
       },
       prefill: {
-        name: 'username',
-        email: 'user@gmail.com',
-        contact: '9788887962',
-      },
-      notes: {
-        address: 'Razorpay Corporate Office',
+        name: 'ShopSphere User',
+        email: 'user@shopsphere.com',
       },
       theme: {
-        color: 'yellow',
+        color: '#F59E0B',
       },
     };
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
   } catch (er) {
-    console.log(er.message);
+    console.error('Payment error:', er.message);
   }
 };
