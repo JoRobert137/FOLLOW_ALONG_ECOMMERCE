@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import CartCard from '../components/ProductCard/CartCard';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { handlePay } from '../Utils/Razorpay';
 import { FaMapMarkerAlt, FaShieldAlt } from 'react-icons/fa';
 
@@ -52,7 +51,6 @@ export default function OrderConfirmation() {
       handlePay(total, token, cartData)
         .then(() => navigate('/order-history'))
         .catch((er) => console.log(er.message));
-      navigate('/order-history');
     } catch (err) {
       console.error(err);
     } finally {

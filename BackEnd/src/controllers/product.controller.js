@@ -15,7 +15,7 @@ const createProductController = async (req, res) => {
   } = req.body;
 
   try {
-    const arrayImage = req.files.map(async (singleFile) => {
+    const arrayImage = req.files.map(async (singleFile, index) => {
       return cloudinary.uploader
         .upload(singleFile.path, {
           folder: 'uploads',
@@ -39,15 +39,16 @@ const createProductController = async (req, res) => {
       userEmail: req.userEmailAddress,
     });
     return res.status(201).send({
-      message: 'Product created successfully',
-      success: true,
+      message: 'Image Successfully Uploaded',
+      sucess: true,
+
       dataImages,
       StoreProductDetails,
     });
   } catch (er) {
     if (er instanceof multer.MulterError) {
       return res.status(400).send({
-        message: 'Multer error: please send 5 or fewer images',
+        message: 'Multer error plese send image less than 5 ',
         success: false,
       });
     }
@@ -58,14 +59,14 @@ const createProductController = async (req, res) => {
 
 const getProductDataController = async (req, res) => {
   try {
-    const data = await ProductModel.find();
+    const data = await ProductModel.find(); 
     return res
-      .status(200)
-      .send({ data, message: 'Data Fetched Successfully' });
+    .status(200)
+    .send({data,message: 'Data Fetched Successfully', });
   } catch (error) {
     return res
-      .status(500)
-      .send({ message: error.message, success: false });
+    .status(500)
+    .send({message: error.message,success: false,});
   }
 };
 
@@ -79,19 +80,17 @@ const updateProductController = async (req, res) => {
     quantity,
     category,
   } = req.body;
-  const { id } = req.params;
+
+  const {id} = req.params;
   try {
-    const checkIfProductExists = await ProductModel.findOne({ _id: id });
-    if (!checkIfProductExists) {
-      return res
-        .status(404)
-        .send({ message: 'Product not found', success: false });
+    const checkIfProductExists = await ProductModel.findOne({_id:id})
+    if(!checkIfProductExists){
+      return res.status(404).send({message: "Product not forund", success : false})
     }
 
-    let ImageData = checkIfProductExists.images;
-
-    if (req.files && req.files.length > 0) {
-      const arrayImage = req.files.map(async (singleFile) => {
+    const arrayImage =
+      req.files &&
+      req.files.map(async (singleFile, index) => {
         return cloudinary.uploader
           .upload(singleFile.path, {
             folder: 'uploads',
@@ -101,11 +100,9 @@ const updateProductController = async (req, res) => {
             return result.url;
           });
       });
-      ImageData = await Promise.all(arrayImage);
-    }
-
-    const findAndUpdate = await ProductModel.findByIdAndUpdate(
-      { _id: id },
+    
+    const ImageData = await Promise.all(arrayImage);
+    const findAndUpdate = await ProductModel.findByIdAndUpdate({_id:id},
       {
         title,
         description,
@@ -114,17 +111,13 @@ const updateProductController = async (req, res) => {
         originalPrice,
         quantity,
         category,
-        images: ImageData,
+        images: ImageData
       },
-      { new: true }
-    );
-    return res.status(200).send({
-      message: 'Document Updated Successfully',
-      success: true,
-      updatedResult: findAndUpdate,
-    });
-  } catch (er) {
-    return res.status(500).send({ message: er.message, success: false });
+      {new: true}
+    )
+      return res.status(200).send({message : "Document Updated Successfully", success : true, updatedResult : findAndUpdate})
+  } catch(er) {
+    return res.send(500).send({message: er.message, success : false})
   }
 };
 
@@ -132,8 +125,9 @@ const getSingleProductDocumentController = async (req, res) => {
   const { id } = req.params;
   try {
     const data = await ProductModel.findOne({ _id: id });
+    console.log(data);
     if (!data) {
-      return res.status(404).send({ message: 'Product Not Found' });
+      return res.status(404).send({ Message: 'Product Not Found' });
     }
 
     return res
@@ -146,16 +140,18 @@ const getSingleProductDocumentController = async (req, res) => {
 
 const deleteSingleProduct = async (req, res) => {
   const { id } = req.params;
+  console.log('id', id);
   try {
     const data = await ProductModel.findOne({ _id: id });
+    console.log(data);
     if (!data) {
-      return res.status(404).send({ message: 'Product Not Found' });
+      return res.status(404).send({ Message: 'Product Not Found' });
     }
 
     await ProductModel.findByIdAndDelete({ _id: id });
     const newData = await ProductModel.find();
     return res.status(200).send({
-      message: 'Product deleted successfully',
+      message: 'Product Successfully fetched',
       data: newData,
       success: true,
     });
@@ -164,10 +160,4 @@ const deleteSingleProduct = async (req, res) => {
   }
 };
 
-module.exports = {
-  getProductDataController,
-  createProductController,
-  updateProductController,
-  getSingleProductDocumentController,
-  deleteSingleProduct,
-};
+module.exports = { getProductDataController, createProductController, updateProductController, getSingleProductDocumentController, deleteSingleProduct};

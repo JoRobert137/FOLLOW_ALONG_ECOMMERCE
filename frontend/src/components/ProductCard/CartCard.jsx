@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
-import { FaTimes, FaUndo, FaShippingFast } from 'react-icons/fa';
+import { FaTimes, FaUndo } from 'react-icons/fa';
 
 export default function CartCard({
   title,

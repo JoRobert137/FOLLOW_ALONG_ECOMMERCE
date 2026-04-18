@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddressList from '../components/AllAddress/Addresses';
 import { Link } from 'react-router-dom';
-import { FaPlus, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
 export default function SelectAddress() {
   const [AllAddresses, setAllAddresses] = useState([]);

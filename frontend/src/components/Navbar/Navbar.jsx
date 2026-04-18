@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { FaShoppingCart, FaUserCircle, FaSearch, FaHeart, FaBars, FaTimes } from 'react-icons/fa';
+import { FaShoppingCart, FaUserCircle, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
 
 function Navbar({ cartCount = 0 }) {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -40,9 +40,7 @@ function Navbar({ cartCount = 0 }) {
   return (
     <nav
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'shadow-lg'
-          : ''
+        scrolled ? 'shadow-lg' : ''
       }`}
       style={{
         background: 'var(--gradient-midnight)',
@@ -79,13 +77,7 @@ function Navbar({ cartCount = 0 }) {
               <NavLink
                 key={link.to}
                 to={link.to}
-                className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? ''
-                      : ''
-                  }`
-                }
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
                 style={({ isActive }) => ({
                   color: isActive ? 'var(--amber)' : 'var(--text-inverse)',
                   background: isActive ? 'var(--amber-glow)' : 'transparent',

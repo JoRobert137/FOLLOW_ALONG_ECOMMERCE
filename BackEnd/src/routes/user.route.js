@@ -7,9 +7,9 @@ const {
   login,
   getUserData,
   AddAddressController,
-  GetAddressController,
-  DeleteAddressController,
+  GetAddressController
 } = require('../controllers/user.controller.js');
+const jwt = require('jsonwebtoken');
 const verifyUser = require('../middlwares/jwt-verify.js');
 const upload = multer({ dest: 'temp-uploads/' });
 const router = express.Router();
@@ -22,6 +22,5 @@ router.post('/login', login);
 router.get('/user-data', verifyUser, getUserData);
 router.post('/add-address', verifyUser, AddAddressController);
 router.get('/get-addresses', verifyUser, GetAddressController);
-router.delete('/delete-address/:id', verifyUser, DeleteAddressController);
 
 module.exports = router;
